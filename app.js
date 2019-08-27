@@ -10,6 +10,8 @@ var apiRouter = require("./routes/api");
 
 var app = express();
 
+require('dotenv').config()
+
 mongoose.connect('mongodb://localhost/shopping_cart',{useNewUrlParser:true},(err)=>{
   err?console.log("error connecting"):console.log("connected to database")
 })

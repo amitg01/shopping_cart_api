@@ -4,15 +4,51 @@ var Schema = mongoose.Schema;
 var bcrypt = require("bcrypt");
 const salt = bcrypt.genSaltSync(10);
 
+var userSchema = new Schema(
+  {
+    firstName: {
+      type: String,
+      required: true
+    },
+    lastName: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    password: {
+      type: String,
+      required: true
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false
+    },
+    cartId: {
+      type: Schema.Types.ObjectId,
+      ref: "Cart"
+    }
+  },
+  { timestamps: true }
+);
 
-var userSchema = new Schema({
-    firstName:{
-        type:String,
-        required: true
-    },
-    lastName:{
-        type:String,
-        required: true
-    },
-    
-})
+userSchema.pre("save", function(next){
+  if (this.password && this.isModified("password")) {
+    this.password = bcrypt.hashSync(this.password, salt);
+  }
+  if (this.email === process.env.EMAIL) {
+    this.isAdmin = true;
+  }
+  next();
+});
+
+var User = mongoose.model("User", userSchema);
+
+module.exports = User;
