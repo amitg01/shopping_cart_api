@@ -41,9 +41,9 @@ router.post("/login", (req, res, next) => {
       return res
         .status(400)
         .json({ success: false, msg: "enter a valid email" });
-    var result = bcrypt.compareSync( data.password,user.password);
+    var result = bcrypt.compareSync(data.password, user.password);
     if (result) {
-      console.log(user,"user in login");
+      console.log(user, "user in login");
       var token = jwt.sign({ _id: user._id }, process.env.SECRET);
       return res.status(200).json({ success: true, token, user });
     } else {
