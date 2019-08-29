@@ -14,8 +14,8 @@ router.get("/", function(req, res, next) {
   });
 });
 
-// user registration
 
+// user registration
 router.post("/register", (req, res, next) => {
   User.create(req.body, (err, user) => {
     if (err) return res.json(err);
@@ -30,8 +30,8 @@ router.post("/register", (req, res, next) => {
   });
 });
 
-// user login
 
+// user login
 router.post("/login", (req, res, next) => {
   var data = req.body;
   User.findOne({ email: data.email }, (err, user) => {
@@ -41,9 +41,9 @@ router.post("/login", (req, res, next) => {
       return res
         .status(400)
         .json({ success: false, msg: "enter a valid email" });
-    var result = bcrypt.compareSync( data.password,user.password);
+    var result = bcrypt.compareSync(data.password, user.password);
     if (result) {
-      console.log(user,"user in login");
+      console.log(user, "user in login");
       var token = jwt.sign({ _id: user._id }, process.env.SECRET);
       return res.status(200).json({ success: true, token, user });
     } else {
@@ -51,5 +51,8 @@ router.post("/login", (req, res, next) => {
     }
   });
 });
+
+
+// 
 
 module.exports = router;
