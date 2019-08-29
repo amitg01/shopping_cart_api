@@ -23,14 +23,16 @@ router.post("/", (req, res) => {
   });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/update/:id", (req, res) => {
   var id = req.params.id;
-  Product.findByIdAndUpdate({ _id: id }, (err, product) => {
+  Product.findByIdAndUpdate(id,req.body, { upsert: true,new: true }, (err, product) => {
     if (err)
       return res
         .status(400)
         .json({ success: false, msg: "failed to update product" });
-        return res.status(200).json({success:true,msg:"product updated"})
+    return res
+      .status(200)
+      .json({ success: true, msg: "product updated", product });
   });
 });
 
