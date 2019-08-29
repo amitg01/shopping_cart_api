@@ -14,8 +14,8 @@ router.get("/", function(req, res, next) {
   });
 });
 
-// user registration
 
+// user registration
 router.post("/register", (req, res, next) => {
   User.create(req.body, (err, user) => {
     if (err) return res.json(err);
@@ -30,8 +30,8 @@ router.post("/register", (req, res, next) => {
   });
 });
 
-// user login
 
+// user login
 router.post("/login", (req, res, next) => {
   var data = req.body;
   User.findOne({ email: data.email }, (err, user) => {
@@ -51,5 +51,8 @@ router.post("/login", (req, res, next) => {
     }
   });
 });
+
+
+// 
 
 module.exports = router;
