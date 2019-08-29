@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
-var auth = require("../../utils/verifyToken");
+var tokenAuth = require("../../utils/verifyToken");
+var AdminAuth = require("../../utils/verifyAdmin")
 
 var User = require("../../models/User");
 
@@ -45,7 +46,7 @@ router.post("/login", (req, res, next) => {
 
 //middleware to verify token
 
-router.use(auth.verifyToken);
+router.use(tokenAuth.verifyToken);
 
 //  GET users listing.
 router.get("/", function(req, res, next) {
@@ -85,23 +86,6 @@ router.put("/update/:id", (req, res) => {
   );
 });
 
-// block a user
-
-router.put("/block/:id", (req, res) => {
-  var id = req.params.id
-  User.findByIdAndUpdate(
-    id,
-    {isBlocked:true},
-    { upsert: true, new: true },
-    (err, user) => {
-      if (err)
-        return res.json({ success: false, msg: "could not block user", err });
-      res.status(200).json({ success: true, msg: "user blocked", user });
-    }
-  );
-
-});
-
 // delete an user
 
 router.delete("/:id", (req, res) => {
@@ -111,6 +95,24 @@ router.delete("/:id", (req, res) => {
     if (err) return res.json({ success: false, msg: "error deleting user" });
     res.status(200).json({ success: true, msg: "user deleted", user });
   });
+});
+
+// block a user
+
+router.use(AdminAuth.verifyAdmin);
+
+router.put("/block/:id", (req, res) => {
+  var id = req.params.id;
+  User.findByIdAndUpdate(
+    id,
+    { isBlocked: true },
+    { upsert: true, new: true },
+    (err, user) => {
+      if (err)
+        return res.json({ success: false, msg: "could not block user", err });
+      res.status(200).json({ success: true, msg: "user blocked", user });
+    }
+  );
 });
 
 module.exports = router;
