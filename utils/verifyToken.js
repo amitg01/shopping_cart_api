@@ -5,12 +5,14 @@ exports.verifyToken = (req, res, next) => {
     req.headers["Authorization"] || req.headers["authorization"] || null;
 
   if (!token) return res.json({ msg: "unAuthorized user" });
-  const bearerToken = token.split("");
+  const bearerToken = token.split(" ");
   const headerBearer = bearerToken[1];
 
   jwt.verify(headerBearer, process.env.SECRET, (err, decoded) => {
-    if (err) return res.json({ success: false, msg: "invalid token" });
+    
+    if (err) return res.json({ success: false, msg: "invalid token",err });
     req.user = decoded;
     next(); 
+    // console.log(headerBearer,process.env.SECRET)
   });
 };
