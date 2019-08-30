@@ -11,16 +11,18 @@ router.use(tokenAuth.verifyToken);
 
 // add item to cart
 
-router.put("/add/:id", (req, res) => {
+router.put("/add/:productId", (req, res) => {
   // use userId to find the users cart
   var { userId } = req.body; // userId is sent from the client
   User.findById(userId, (err, user) => {
     if (err) return res.status(400).json({ err });
-    Item.create({ productId: req.params.id }, (err, item) => {
+    console.log(req.params.productId,'in add items to cart')
+    Item.create({ productId: req.params.productId }, (err, item) => {
       if (err) return res.status(400).json({ err });
       Cart.findByIdAndUpdate(
         user.cartId,
-        { $push: { items: item.id } },
+        //make sure $push and items are in quotes
+        { '$push': { 'items': item.id } },
         { new: true, upsert: true },
         (err, cart) => {
           if (err)
@@ -45,7 +47,8 @@ router.delete("/remove/:itemId", (req, res) => {
     if (err) return res.status(400).json({ err });
       Cart.findByIdAndUpdate(
         user.cartId,
-        { $pull: { items: req.params.itemId } },
+        //make sure $push and items are in quotes
+        { '$pull': { 'items': req.params.itemId } },
         { new: true, upsert: true },
         (err, cart) => {
           if (err)
@@ -60,5 +63,13 @@ router.delete("/remove/:itemId", (req, res) => {
 
   });
 });
+
+// increase items in a cart
+
+router.put('/:itemId/increase',(req,res)=>{
+    Item.findByIdAndUpdate(req.params.itemId,{quantity:quantity++},{new:true},(err,item)=>{
+        if(err) return res.status(400).json({success:false,msg:"failed to icrease item"})
+    })
+})
 
 module.exports = router;
