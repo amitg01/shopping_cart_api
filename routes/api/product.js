@@ -23,6 +23,8 @@ router.post("/", (req, res) => {
   });
 });
 
+// update a product
+
 router.put("/update/:id", (req, res) => {
   var id = req.params.id;
   Product.findByIdAndUpdate(
@@ -73,5 +75,7 @@ router.delete("/delete/:id", (req, res) => {
     return res.status(200).json({ success: true, msg: "product deleted" });
   });
 });
+
+
 
 module.exports = router;

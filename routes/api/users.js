@@ -1,9 +1,10 @@
 var express = require("express");
 var router = express.Router();
 var tokenAuth = require("../../utils/verifyToken");
-var AdminAuth = require("../../utils/verifyAdmin")
+var AdminAuth = require("../../utils/verifyAdmin");
 
 var User = require("../../models/User");
+var Cart = require("../../models/Cart");
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcrypt");
@@ -12,13 +13,34 @@ var bcrypt = require("bcrypt");
 router.post("/register", (req, res, next) => {
   User.create(req.body, (err, user) => {
     if (err) return res.json(err);
-    console.log("cp1");
     jwt.sign({ userId: user.id }, process.env.SECRET, (err, token) => {
       if (err) return res.json({ success: false });
-      return res.status(200).json({
-        sucess: true,
-        message: "you are successfully registered"
+      Cart.create({ userId: user.id }, (err, cart) => {
+        if (err)
+          return res
+            .status(400)
+            .json({ success: false, msg: "error creating cart", err });
+        User.findByIdAndUpdate(
+          { _id: user.id },
+          { cartId: cart.id },
+          { new: true },
+          (err,
+          Product => {
+            if (err)
+              return res
+                .status(400)
+                .json({ success: false, msg: "error updating cartId" });
+            return res.status(200).json({
+              success: true,
+              message: "you are successfully registered"
+            });
+          })
+        );
       });
+      // return res.status(200).json({
+      //   sucess: true,
+      //   message: "you are successfully registered"
+      // });
     });
   });
 });
@@ -71,7 +93,6 @@ router.get("/:id", (req, res) => {
 // update an user
 
 router.put("/update/:id", (req, res) => {
-  console.log("cp2");
   var id = req.params.id;
 
   User.findByIdAndUpdate(
