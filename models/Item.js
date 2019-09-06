@@ -6,7 +6,7 @@ var itemSchema = new Schema({
   quantity: {
     type: Number,
     min: 0,
-    defualt:0
+    defualt:1
   }
 });
 

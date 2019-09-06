@@ -9,10 +9,8 @@ exports.verifyToken = (req, res, next) => {
   const headerBearer = bearerToken[1];
 
   jwt.verify(headerBearer, process.env.SECRET, (err, decoded) => {
-    
-    if (err) return res.json({ success: false, msg: "invalid token",err });
+    if (err) return res.json({ success: false, msg: "invalid token", err });
     req.user = decoded;
-    next(); 
-    // console.log(headerBearer,process.env.SECRET)
+    next();
   });
 };

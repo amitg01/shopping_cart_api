@@ -5,6 +5,9 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
 
+// require('./models/Cart');
+// require('./models/User');
+
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 
@@ -32,8 +35,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
 app.use("/api/v1", apiRouter);
+app.use("/", indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
