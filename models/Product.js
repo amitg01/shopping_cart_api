@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var productSchema = new Schema({
@@ -14,18 +14,22 @@ var productSchema = new Schema({
   quantity: {
     type: Number,
     default: 0,
-    min:0
+    min: 0
   },
   price: {
     type: Number,
     required: true,
-    min:0
+    min: 0
   },
   description: {
     type: String
   },
   tags: {
     type: [String]
+  },
+  storeId: {
+    type: Schema.Types.ObjectId,
+    ref: "Store"
   }
 });
 

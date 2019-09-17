@@ -13,7 +13,8 @@ exports.verifyAdmin = (req, res, next) => {
     if (err) return res.json({ success: false, msg: "invalid token" });
     User.findById({ _id: decoded._id }, (err, user) => {
       if (err) return res.status(404).json("user not found");
-      if (!user.isAdmin || !user.isStoreAdmin) {
+      console.log("cp in verifyAdmin");
+      if (!user.isAdmin && !user.isStoreAdmin) {
         return res.status(401).json({ msg: "you are not authorized" });
       }
       next();

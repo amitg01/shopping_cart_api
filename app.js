@@ -4,6 +4,9 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var expressStaticGzip = require("express-static-gzip");
+const webpack = require("webpack");
+const middleware = require("webpack-dev-middleware");
 
 // require('./models/Cart');
 // require('./models/User');
