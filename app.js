@@ -20,7 +20,7 @@ require("dotenv").config();
 
 mongoose.connect(
   process.env.MONGODB_URI || "mongodb://localhost/shopping_cart",
-  { useNewUrlParser: true },
+  { useNewUrlParser: true, useUnifiedTopology: true },
   err => {
     err
       ? console.log("error connecting")
