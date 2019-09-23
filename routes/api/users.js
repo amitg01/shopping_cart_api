@@ -3,10 +3,6 @@ var router = express.Router();
 var tokenAuth = require("../../utils/verifyToken");
 var AdminAuth = require("../../utils/verifyAdmin");
 
-// var mongoose = require('mongoose');
-// var Cart = mongoose.model('Cart');
-// var User = mongoose.model('User');
-
 var User = require("../../models/User");
 var Cart = require("../../models/Cart");
 
@@ -24,8 +20,6 @@ router.post("/register", (req, res, next) => {
           return res
             .status(400)
             .json({ success: false, msg: "error creating cart", err });
-        // user.cartId = cart.id;
-        // user.save((err, user) => )
         User.findByIdAndUpdate(
           { _id: user.id },
           { cartId: cart.id },

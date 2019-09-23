@@ -7,6 +7,8 @@ var User = require("../../models/User");
 
 router.use(tokenAuth.verifyToken);
 
+// create store
+
 router.post("/create", (req, res) => {
   var { creatorId } = req.body;
   Store.create({ creatorId }, (err, store) => {
